@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>God‑level AI Dropship — Demo</title>
+  <meta name="description" content="Free, single-file AI dropshipping storefront demo. Deploy to GitHub Pages: just upload index.html to a public repo." />
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f1724; --glass: rgba(255,255,255,0.03);
+      --accent:#7c3aed; --muted:#9aa4b2; --radius:14px; --maxw:1100px;
+      --glass-2: rgba(255,255,255,0.02);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial; background:linear-gradient(180deg,#071026 0%, #081727 50%, #0b1220 100%);color:#e6eef8}
+    .wrap{max-width:var(--maxw);margin:26px auto;padding:18px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#4c6ef5);display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 6px 20px rgba(124,58,237,0.14)}
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;font-size:14px}
+    .btn{background:var(--accent);padding:10px 14px;border-radius:12px;color:white;text-decoration:none;font-weight:600}
+
+    .hero{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:22px;border-radius:18px;display:flex;flex-direction:column;gap:18px;margin-bottom:16px}
+    .hero h1{margin:0;font-size:28px}
+    .hero p{margin:0;color:var(--muted)}
+
+    .panel{background:linear-gradient(180deg,var(--glass),var(--glass-2));padding:14px;border-radius:12px}
+    .controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+    .search{flex:1;min-width:160px}
+    input[type=search],select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    @media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:8px}
+    .thumb{height:150px;border-radius:10px;background:linear-gradient(135deg,#0f1724,#071330);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+    .title{font-weight:700}
+    .meta{color:var(--muted);font-size:13px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .price{font-weight:800}
+    .small{font-size:13px;color:var(--muted)}
+
+    .cart-float{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--accent),#4c6ef5);width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(12,22,58,0.6);z-index:60}
+    .cart-count{position:absolute;right:8px;top:8px;background:#ff5b6a;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:white}
+
+    /* modal */
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;padding:18px}
+    .modal .box{width:100%;max-width:720px;background:linear-gradient(180deg,#071227 0%, #071022 80%);padding:18px;border-radius:16px}
+    .cart-items{max-height:320px;overflow:auto}
+    .muted{color:var(--muted)}
+
+    footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center}
+
+    .tiny{font-size:12px;color:var(--muted)}
+    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:10px}
+
+    .import-area{width:100%;min-height:70px;padding:10px;border-radius:10px;border:1px dashed rgba(255,255,255,0.03);background:transparent;color:inherit}
+    .brand-name{font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">AI</div>
+        <div>
+          <div class="brand-name">God‑level Dropship (Demo)</div>
+          <div class="tiny">Static demo — perfect for GitHub Pages</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+        <a class="btn" id="open-products">Open Store</a>
+      </nav>
+    </header>
+
+    <section class="hero panel">
+      <div>
+        <h1>Free, single-file dropship storefront — drop in `index.html` &amp; publish on GitHub Pages</h1>
+        <p>Static front-end that looks pro, searchable product grid, local cart, and a simple checkout that opens your email (works perfectly on mobile). No server, no cost.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="secondary" id="import-json">Import JSON Products</a>
+        <a class="secondary" id="download-sample">Download sample CSV</a>
+        <a class="btn" id="edit-email">Store email: <span id="store-email-show">orders@yourstore.com</span></a>
+      </div>
+    </section>
+
+    <section class="panel" id="products">
+      <div class="controls">
+        <div class="search"><input type="search" id="q" placeholder="Search products, e.g. earbuds, lamp" /></div>
+        <div style="width:160px"><select id="sort"><option value="popular">Sort: Popular</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option></select></div>
+        <div style="width:120px"><select id="filter"><option value="all">All</option><option value="fast">Fast shipping</option><option value="eco">Eco</option></select></div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+
+    </section>
+
+    <footer>
+      Made for GitHub Pages · Copy the code into index.html and upload to a public repo · To get on Google submit a sitemap (instructions below)
+    </footer>
+  </div>
+
+  <!-- floating cart -->
+  <div class="cart-float" id="cart-btn" title="Open cart">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 6px 14px rgba(2,6,23,0.6));"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="10" cy="20" r="1.6" fill="white"></circle><circle cx="18" cy="20" r="1.6" fill="white"></circle></svg>
+    <div class="cart-count" id="cart-count">0</div>
+  </div>
+
+  <!-- cart modal -->
+  <div class="modal" id="modal">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0">Your cart</h3>
+        <div><button class="secondary" id="close-modal">Close</button></div>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <div class="muted">Shipping: calculated by supplier</div>
+        <div><strong>Total:</strong> <span id="cart-total">$0.00</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn" id="checkout">Checkout (Email)</button>
+        <button class="secondary" id="clear-cart">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ===================
+       CONFIG
+       =================== */
+    let STORE_EMAIL = 'orders@yourstore.com'; // CHANGE this to your real store email (edit index.html in repo)
+    document.getElementById('store-email-show').textContent = STORE_EMAIL;
+
+    /* sample product data (single-file — you can replace/extend by editing `products` array) */
+    const products = [
+      {id:'p1',title:'Wireless Smart Earbuds',price:19.99,tag:'audio',ship:'7-15 days', rating:4.6,desc:'Compact earbuds with AI tuning.'},
+      {id:'p2',title:'Mini Portable Projector',price:79.00,tag:'tech',ship:'10-20 days',rating:4.4,desc:'Pocket-sized home theater.'},
+      {id:'p3',title:'LED Vanity Mirror',price:24.50,tag:'home',ship:'5-12 days',rating:4.5,desc:'Dimmable mirror for makeup.'},
+      {id:'p4',title:'Smart Fitness Band',price:29.99,tag:'fitness',ship:'7-15 days',rating:4.2,desc:'Heart rate, sleep, steps.'},
+      {id:'p5',title:'Magnetic Phone Mount',price:9.99,tag:'accessory',ship:'3-8 days',rating:4.7,desc:'Strong magnet, rotation.'},
+      {id:'p6',title:'Eco Reusable Straw Set',price:6.99,tag:'eco',ship:'6-14 days',rating:4.8,desc:'Stainless + travel case.'},
+      {id:'p7',title:'USB-C Fast Charger',price:12.75,tag:'tech',ship:'4-10 days',rating:4.5,desc:'30W fast charging.'},
+      {id:'p8',title:'Noise-canceling Headphones',price:49.90,tag:'audio',ship:'12-24 days',rating:4.1,desc:'Over-ear comfort.'},
+      {id:'p9',title:'Stylish Tote Bag',price:21.00,tag:'fashion',ship:'6-14 days',rating:4.3,desc:'Canvas tote with inner pocket.'},
+      {id:'p10',title:'Smart LED Strip',price:15.99,tag:'home',ship:'7-18 days',rating:4.4,desc:'App-controlled ambient light.'},
+      {id:'p11',title:'Compact Air Purifier',price:39.99,tag:'home',ship:'10-20 days',rating:4.0,desc:'Quiet, USB-powered.'},
+      {id:'p12',title:'Rechargeable Hand Warmer',price:14.99,tag:'lifestyle',ship:'5-12 days',rating:4.6,desc:'Pocket heated relief.'}
+    ];
+
+    /* ============ render ============ */
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+    const sort = document.getElementById('sort');
+    const filter = document.getElementById('filter');
+
+    function productThumbSVG(title){
+      // simple SVG placeholder — keeps file single-file and free
+      const txt = encodeURIComponent(title);
+      return `<svg width="100%" height="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#0f1724"/><stop offset="1" stop-color="#08314c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)" rx="14" /><text x="50%" y="50%" fill="rgba(255,255,255,0.08)" font-size="22" font-family="sans-serif" dominant-baseline="middle" text-anchor="middle">${title}</text></svg>`;
+    }
+
+    function renderList(list){
+      grid.innerHTML = list.map(p=>`
+        <div class="card" data-id="${p.id}">
+          <div class="thumb">${productThumbSVG(p.title)}</div>
+          <div class="title">${p.title}</div>
+          <div class="meta small">${p.desc}</div>
+          <div class="row">
+            <div class="price">$${Number(p.price).toFixed(2)}</div>
+            <div class="small">${p.rating} ★ · ${p.ship}</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn" onclick="addToCart('${p.id}')">Add</button>
+            <button class="secondary" onclick="viewProduct('${p.id}')">Quick</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function applyFilters(){
+      const qv = q.value.trim().toLowerCase();
+      let out = products.filter(p=>{
+        if(qv && !(p.title.toLowerCase().includes(qv) || p.desc.toLowerCase().includes(qv) || p.tag.toLowerCase().includes(qv))) return false;
+        if(filter.value==='fast' && !p.ship.match(/^[0-9]+-[0-9]+ days$/)) return true; // keep forgiving
+        if(filter.value==='eco' && p.tag!=='eco') return false;
+        return true;
+      });
+      if(sort.value==='price-asc') out.sort((a,b)=>a.price-b.price);
+      if(sort.value==='price-desc') out.sort((a,b)=>b.price-a.price);
+      renderList(out);
+    }
+
+    q.addEventListener('input',applyFilters);
+    sort.addEventListener('change',applyFilters);
+    filter.addEventListener('change',applyFilters);
+
+    // initial render
+    renderList(products);
+
+    /* ============ cart ============ */
+    let cart = JSON.parse(localStorage.getItem('god_cart')||'[]');
+    const cartCount = document.getElementById('cart-count');
+    function updateCartBadge(){ cartCount.textContent = cart.reduce((s,i)=>s+i.qty,0); }
+    updateCartBadge();
+
+    window.addToCart = function(id){
+      const p = products.find(x=>x.id===id); if(!p) return;
+      const found = cart.find(x=>x.id===id);
+      if(found) found.qty++;
+      else cart.push({id:p.id,title:p.title,price:p.price,qty:1});
+      localStorage.setItem('god_cart',JSON.stringify(cart));
+      updateCartBadge();
+      // small feedback
+      const b = document.createElement('div'); b.textContent='Added'; b.style.position='fixed'; b.style.right='18px'; b.style.bottom='86px'; b.style.background='rgba(0,0,0,0.6)'; b.style.padding='8px 12px'; b.style.borderRadius='8px'; document.body.appendChild(b);
+      setTimeout(()=>b.remove(),900);
+    }
+
+    function buildCartHTML(){
+      if(cart.length===0) return '<div class="muted">Your cart is empty.</div>';
+      return cart.map(item=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.02)"><div><div style="font-weight:700">${item.title}</div><div class="muted">$${Number(item.price).toFixed(2)} · qty: ${item.qty}</div></div><div><button class="secondary" onclick="dec('${item.id}')">−</button> <button class="secondary" onclick="inc('${item.id}')">+</button> <button class="secondary" onclick="removeItem('${item.id}')">✕</button></div></div>`).join('');
+    }
+
+    function inc(id){ const it = cart.find(x=>x.id===id); if(it){it.qty++;saveCart();} }
+    function dec(id){ const it = cart.find(x=>x.id===id); if(it){it.qty--; if(it.qty<=0) cart = cart.filter(x=>x.id!==id); saveCart();} }
+    function removeItem(id){ cart = cart.filter(x=>x.id!==id); saveCart(); }
+    function saveCart(){ localStorage.setItem('god_cart',JSON.stringify(cart)); updateCartBadge(); renderCart(); }
+
+    function renderCart(){ document.getElementById('cart-items').innerHTML = buildCartHTML(); document.getElementById('cart-total').textContent = '$'+(cart.reduce((s,i)=>s+i.price*i.qty,0)).toFixed(2); }
+
+    document.getElementById('cart-btn').addEventListener('click',()=>{ openModal(); });
+    document.getElementById('close-modal').addEventListener('click',()=>{ closeModal(); });
+    document.getElementById('clear-cart').addEventListener('click',()=>{ cart=[]; saveCart(); });
+
+    function openModal(){ renderCart(); document.getElementById('modal').style.display='flex'; }
+    function closeModal(){ document.getElementById('modal').style.display='none'; }
+
+    document.getElementById('checkout').addEventListener('click',()=>{ doCheckout(); });
+
+    function doCheckout(){
+      if(cart.length===0){ alert('Cart empty'); return; }
+      // build email body
+      let body = 'New order from God-level dropship%0D%0A%0D%0A';
+      body += 'Items:%0D%0A';
+      cart.forEach(i=>{ body += `- ${i.title} x${i.qty} @ $${Number(i.price).toFixed(2)}%0D%0A`; });
+      body += `%0D%0ATotal: $${(cart.reduce((s,i)=>s+i.price*i.qty,0)).toFixed(2)}%0D%0A%0D%0A`;
+      body += 'Please reply with full shipping address and phone number.%0D%0A';
+      const subject = encodeURIComponent('Order from your GitHub Pages store');
+      const mailto = `mailto:${STORE_EMAIL}?subject=${subject}&body=${body}`;
+      // open mail client
+      window.location.href = mailto;
+    }
+
+    function viewProduct(id){ const p = products.find(x=>x.id===id); if(!p) return; alert(`${p.title}\n\n${p.desc}\nPrice: $${p.price}`); }
+
+    // helpers for buttons
+    window.inc = inc; window.dec = dec; window.removeItem = removeItem;
+
+    // import products JSON (paste) — quick way to add bulk products without editing HTML
+    document.getElementById('import-json').addEventListener('click',()=>{
+      const txt = prompt('Paste JSON array of products (id,title,price,desc,tag,ship,rating)');
+      if(!txt) return; try{ const arr = JSON.parse(txt); arr.forEach(a=>products.push(a)); applyFilters(); alert('Imported '+arr.length+' products'); }catch(e){alert('Invalid JSON')}
+    });
+
+    document.getElementById('edit-email').addEventListener('click',()=>{
+      const em = prompt('Enter store email (orders will open your mail app to this email):',STORE_EMAIL);
+      if(!em) return; STORE_EMAIL = em; document.getElementById('store-email-show').textContent = STORE_EMAIL;
+    });
+
+    // download CSV sample
+    document.getElementById('download-sample').addEventListener('click',()=>{
+      const csv = 'id,title,price,desc,tag,ship,shipping\n' + products.map(p=>`${p.id},"${p.title}",${p.price},"${p.desc}",${p.tag},"${p.ship}"`).join('\n');
+      const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='products-sample.csv'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // open store anchor
+    document.getElementById('open-products').addEventListener('click',()=>{ location.hash='products'; window.scrollTo({top:document.getElementById('products').offsetTop-24,behavior:'smooth'}); });
+
+    // initial small UI tweaks
+    (function(){ if(location.hash==='#/cart') openModal(); })();
+
+  </script>
+
+  <!-- SEO helpers: copy these into repo as separate files for Search Console: robots.txt and sitemap.xml (instructions in README below)
+       robots.txt sample:
+         User-agent: *\nAllow: /\nSitemap: https://YOUR_USERNAME.github.io/YOUR_REPO/sitemap.xml
+       sitemap.xml sample (create file sitemap.xml with list of your URLs)
+  -->
+</body>
+</html>
